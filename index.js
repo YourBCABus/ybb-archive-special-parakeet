@@ -91,4 +91,4 @@ setInterval(async () => {
         running--;
         console.log(`Finished execution. Time: ${(new Date().getTime() - start.getTime()) / 1000} ms`);
     }
-}, 60 * 60);
+}, 60 * 1000);
