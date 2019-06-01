@@ -62,23 +62,24 @@ setInterval(async () => {
 
                 const stmt = db.prepare("INSERT INTO messages_sent (date, ok) VALUES (?, 1)");
 
-                const payload = {
-                    topic: `school.${config.school}.dismissal`,
+                await firebase.messaging().send({
+                    topic: `school.${config.school}.dismissal.banner`,
                     data: {
                         dismissal: dismissal.toJSON()
                     },
                     apns: {
                         payload: {
                             aps: {
-                                contentAvailable: true
+                                alert: {
+                                    title: "Dismissal Summary",
+                                    body: "Open the app to add a destination for your dismissal summary."
+                                },
+                                category: "DISMISSAL_SUMMARY"
                             }
                         }
                     }
-                };
-
-                await firebase.messaging().send(payload);
+                });
                 console.log("Sent!");
-                console.log(payload);
 
                 await util.promisify(stmt.run.bind(stmt))(Math.floor(now.toSeconds()));
             }
